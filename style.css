@@ -164,9 +164,8 @@ body {
     animation-name: heroCycleText;
 }
 
-/* Quebras de linha: desktop "Imprimimos uma parte / do seu universo" */
-.hero-cycle-text .br-mobile { display: none; }
-.hero-cycle-text .br-desktop { display: inline; }
+/* ---- CTA do mobile ---- */
+.hero-cta-mobile { display: none; }
 
 @keyframes heroCycleLogo {
     0%   { opacity: 0; transform: scale(0.94); filter: drop-shadow(0 0 34px rgba(0,132,255,0.55)) blur(6px); }
@@ -1431,11 +1430,61 @@ body {
             );
     }
 
-    .hero-stage { padding: 32px 20px; }
+    /* espaço embaixo para o CTA não encostar no texto */
+    .hero-stage { padding: 32px 20px 130px; }
 
-    /* mobile: "Imprimimos uma / parte do seu / universo" */
-    .hero-cycle-text .br-mobile { display: inline; }
-    .hero-cycle-text .br-desktop { display: none; }
+    /* CTA azul com brilho, fixo na parte inferior da hero */
+    .hero-cta-mobile {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 62px;
+        z-index: 5;
+        padding: 15px 30px;
+        border-radius: 999px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        white-space: nowrap;
+        color: #fff;
+        background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 45%, var(--cyan) 100%);
+        border: 1px solid rgba(120,200,255,0.45);
+        overflow: hidden;
+        animation: heroCtaGlow 2.8s ease-in-out infinite;
+    }
+
+    /* efeito shine passando por cima */
+    .hero-cta-mobile::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -140%;
+        width: 55%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+        transform: skewX(-20deg);
+        animation: heroCtaShine 2.8s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .hero-cta-mobile:active { opacity: 0.9; }
+
+    @keyframes heroCtaGlow {
+        0%, 100% { box-shadow: 0 4px 16px rgba(0,102,255,0.35), inset 0 1px 0 rgba(255,255,255,0.25); }
+        50%      { box-shadow: 0 6px 30px rgba(0,132,255,0.75), 0 0 54px rgba(0,102,255,0.3), inset 0 1px 0 rgba(255,255,255,0.25); }
+    }
+
+    @keyframes heroCtaShine {
+        0%   { left: -140%; }
+        55%  { left: 160%; }
+        100% { left: 160%; }
+    }
 
     /* mobile: conteúdo na metade inferior */
     .hero-inner {
