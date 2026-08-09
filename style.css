@@ -1374,6 +1374,11 @@ body {
     50% { box-shadow: 0 6px 20px rgba(37,211,102,0.5), 0 0 0 14px rgba(37,211,102,0); }
 }
 
+/* No desktop a hero fica sem nenhum CTA — o botão flutuante só no mobile */
+@media (min-width: 769px) {
+    .whatsapp-float { display: none; }
+}
+
 /* =====================================================
    RESPONSIVE
    ===================================================== */
