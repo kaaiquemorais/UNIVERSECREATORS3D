@@ -1445,7 +1445,10 @@ body {
     }
 
     /* espaço embaixo para o CTA não encostar no texto */
-    .hero-stage { padding: 32px 20px 130px; }
+    /* padding simétrico: o CTA é absoluto e não ocupa espaço, então
+       qualquer folga extra embaixo jogaria logo e frase para cima,
+       fora do centro dos anéis */
+    .hero-stage { padding: 32px 20px; }
 
     /* CTA azul com brilho, fixo na parte inferior da hero */
     .hero-cta-mobile {
@@ -1455,7 +1458,7 @@ body {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        bottom: 62px;
+        bottom: 92px;
         z-index: 5;
         padding: 15px 30px;
         border-radius: 999px;
