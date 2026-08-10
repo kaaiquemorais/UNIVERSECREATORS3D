@@ -1426,6 +1426,32 @@ body {
     .hero-cycle-logo { width: clamp(140px, 30vmin, 260px); }
     .hero-cycle-text { font-size: clamp(0.95rem, 2.8vmin, 1.6rem); }
 
+    /* shine varrendo a palavra "universo" */
+    .hero-cycle-text .highlight-blue {
+        background: linear-gradient(
+            100deg,
+            var(--neon) 0%,
+            var(--blue-light) 32%,
+            #eaf6ff 46%,
+            #ffffff 50%,
+            #eaf6ff 54%,
+            var(--blue-light) 68%,
+            var(--neon) 100%
+        );
+        background-size: 260% 100%;
+        background-position: 100% 0;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        animation: heroWordShine 7s ease-in-out infinite;
+    }
+
+    @keyframes heroWordShine {
+        0%        { background-position: 100% 0; }
+        45%, 100% { background-position: 0% 0; }
+    }
+
     /* mobile: vinheta mais suave, centro sempre limpo */
     .hero-bg-overlay {
         background:
