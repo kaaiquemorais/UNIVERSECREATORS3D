@@ -1501,9 +1501,13 @@ body {
         white-space: nowrap;
         color: #fff;
         background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 45%, var(--cyan) 100%);
-        border: 1px solid rgba(120,200,255,0.45);
+        border: 1px solid rgba(120,200,255,0.5);
         overflow: hidden;
-        animation: heroCtaGlow 10s ease-in-out infinite;
+        /* neon constante — sem pulsar */
+        box-shadow:
+            0 5px 26px rgba(0,132,255,0.6),
+            0 0 46px rgba(0,102,255,0.24),
+            inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
     /* efeito shine passando por cima */
@@ -1521,11 +1525,6 @@ body {
     }
 
     .hero-cta-mobile:active { opacity: 0.9; }
-
-    @keyframes heroCtaGlow {
-        0%, 100% { box-shadow: 0 4px 16px rgba(0,102,255,0.35), inset 0 1px 0 rgba(255,255,255,0.25); }
-        50%      { box-shadow: 0 6px 30px rgba(0,132,255,0.75), 0 0 54px rgba(0,102,255,0.3), inset 0 1px 0 rgba(255,255,255,0.25); }
-    }
 
     @keyframes heroCtaShine {
         0%        { left: -140%; }
