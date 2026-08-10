@@ -1415,7 +1415,16 @@ body {
 }
 
 @media (max-width: 768px) {
-    .hero { min-height: 100svh; }
+    /* svh = altura real visível: o hero cabe na tela mesmo com a barra
+       do navegador, sem sobrar rolagem antes do marquee */
+    .hero {
+        height: 100svh;
+        min-height: 0;
+    }
+
+    /* logo e frase encolhem junto com a altura da tela */
+    .hero-cycle-logo { width: clamp(140px, 30vmin, 260px); }
+    .hero-cycle-text { font-size: clamp(0.95rem, 2.8vmin, 1.6rem); }
 
     /* mobile: vinheta mais suave, centro sempre limpo */
     .hero-bg-overlay {
