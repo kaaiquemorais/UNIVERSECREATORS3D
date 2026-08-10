@@ -168,29 +168,32 @@ body {
    Escopado no hero: a classe .highlight-blue também é usada nos títulos
    das seções, que devem continuar estáticos. */
 .hero-cycle-text .highlight-blue {
-    background: linear-gradient(
+    /* pontas de cor cheia + trecho visível de 1/3 do gradiente: o último
+       quadro do ciclo é igual ao primeiro, então o loop não corta */
+    background-image: linear-gradient(
         100deg,
         var(--neon) 0%,
-        var(--blue-light) 32%,
-        #eaf6ff 46%,
+        var(--neon) 35%,
+        var(--blue-light) 42%,
+        #eaf6ff 47%,
         #ffffff 50%,
-        #eaf6ff 54%,
-        var(--blue-light) 68%,
+        #eaf6ff 53%,
+        var(--blue-light) 58%,
+        var(--neon) 65%,
         var(--neon) 100%
     );
-    background-size: 260% 100%;
+    background-size: 300% 100%;
     background-position: 100% 0;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: heroWordShine 10s ease-in-out infinite;
+    animation: heroWordShine 5s ease-in-out infinite;
 }
 
-/* a varredura leva 4,5s e o resto do ciclo é descanso */
 @keyframes heroWordShine {
     0%        { background-position: 100% 0; }
-    45%, 100% { background-position: 0% 0; }
+    55%, 100% { background-position: 0% 0; }
 }
 
 /* ---- CTA do mobile ---- */
