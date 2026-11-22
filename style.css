@@ -575,6 +575,10 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .hero-lead strong { color: var(--ink); font-weight: 600; }
 .lead-line { display: block; }
 
+/* quebra de linha só no celular */
+.only-mobile { display: none; }
+@media (max-width: 860px) { .only-mobile { display: inline; } }
+
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
@@ -631,12 +635,6 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .section { padding: clamp(64px, 9vw, 120px) 0; border-top: 1px solid var(--line); }
 .hero + .section { border-top: 0; }
 
-/* desempenho: o navegador só desenha estas seções quando chegam perto da
-   tela (serviços fica de fora: o carrossel mede a largura ao carregar) */
-.work, .process, .faq, .contact {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
-}
 
 .section-intro h2 { font-size: clamp(1.55rem, 1.2rem + 1.3vw, 2.15rem); }
 .section-intro p {
@@ -1090,37 +1088,25 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 
     .services-grid, .faq-grid, .contact-inner { grid-template-columns: 1fr; }
 
-    /* serviços voltam a ser lista */
-    .carousel-controls { display: none; }
-    .services-grid { gap: 28px; }
+    /* serviços no celular: carrossel de arrastar com o dedo, cards do
+       mesmo tamanho das fotos da galeria (2 por tela, foto 3:4) */
+    .services-grid { gap: 20px; }
+    .carousel-controls { justify-content: center; }
+    .carousel-btn { display: none; }       /* no celular arrasta com o dedo */
+    .carousel-hint { margin-right: 0; }
     .service-list {
-        display: block;
-        overflow: visible;
+        gap: 12px;                          /* mesmo espaço da galeria */
         cursor: auto;
-        padding: 0;
-        margin: 0;
+        padding: 16px 6px 22px;
+        margin: -16px -6px -22px;
     }
-    .js .service-list:not(.at-end),
-    .js .service-list:not(.at-start):not(.at-end),
-    .js .service-list.at-end:not(.at-start) {
-        -webkit-mask-image: none;
-        mask-image: none;
+    .service {
+        flex: 0 0 calc((100% - 12px) / 2);
+        text-align: center;
     }
-    /* serviços: grade de cards centralizados, foto inteira em pé (3:4) */
-    .service-list {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 32px 16px;
-    }
-    .service { text-align: center; }
-    .service:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-        justify-self: center;
-        width: calc(50% - 8px);
-    }
-    .service img { width: 100%; max-width: 132px; height: auto; aspect-ratio: 3 / 4; border-radius: 12px; margin-inline: auto; }
-    .service h3 { margin-top: 14px; font-size: 1rem; }
-    .service p { font-size: 0.875rem; }
+    .service img { width: 100%; height: auto; aspect-ratio: 3 / 4; border-radius: 12px; }
+    .service h3 { margin-top: 12px; font-size: 0.9375rem; }
+    .service p { font-size: 0.8125rem; }
 
     /* tudo centralizado no celular */
     .section-intro,
@@ -1172,8 +1158,11 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     .contact .btn { width: 100%; }
 
 
-    /* espaço para o botão flutuante não cobrir o rodapé */
-    .site-footer { padding-bottom: 88px; }
+    /* rodapé enxuto no celular (o conteúdo é centralizado e estreito,
+       então o WhatsApp flutuante no canto não cobre nada) */
+    .site-footer { padding: 28px 0 30px; }
+    .footer-inner { gap: 12px; }
+    .footer-copy { margin-top: 2px; }
 }
 
 /* celular bem estreito (320–374px): só o botão principal na hero */
