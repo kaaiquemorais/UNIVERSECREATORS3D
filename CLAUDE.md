@@ -53,7 +53,7 @@ Produção: https://3duniversecreators.netlify.app · repo `github.com/kaaiquemo
 - **Fotos** com neon azul no contorno; galeria em 3:4 (formato das fotos, quase sem corte); mostra 8 e "Ver mais trabalhos" (centralizado, sem link do Instagram ao lado) revela o resto.
 - **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
-- No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
+- No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
 - Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto). Letras pequenas de propósito.
 
 ## SEO e buscadores de IA

@@ -1083,6 +1083,10 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     .contact h2, .contact-copy p { margin-inline: auto; }
     .contact-list li { flex-direction: column; text-align: center; gap: 8px; }
 
+    /* rodapé no celular: os links de serviço não cabem numa linha, então somem
+       (continuam no HTML para o SEO) */
+    .footer-links { display: none; }
+
 
     /* passos centralizados */
     .step { text-align: center; }
