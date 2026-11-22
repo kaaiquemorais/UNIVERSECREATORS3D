@@ -1094,13 +1094,14 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         grid-template-areas: "." "figure" "copy" ".";
         justify-items: center;
         gap: 0;
-        min-height: 100svh;
+        /* hero + faixa de serviços = exatamente a tela (a faixa fica na base) */
+        min-height: calc(100svh - var(--ticker-h));
         padding-top: var(--header-h);
         padding-bottom: 0;
     }
     .hero-figure {
         width: 100%;
-        height: clamp(220px, 50svh, 470px);
+        height: clamp(180px, min(50svh, calc(100svh - var(--header-h) - var(--ticker-h) - 262px)), 470px);
     }
     /* degradê suave só no mascote (a chuva fica livre para subir) */
     .hero-mascot-wrap {
@@ -1124,7 +1125,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         text-align: center;
         padding-block: 0;
         /* sobe um pouco sobre a parte esfumaçada do mascote */
-        margin-top: clamp(6px, 1.6svh, 16px);   /* pequeno respiro abaixo do alien */
+        margin-top: clamp(2px, 0.8svh, 8px);   /* respiro curtinho abaixo do alien */
     }
     .hero h1 { font-size: clamp(1.5rem, 5.4vw, 2.1rem); }
     .hero-lead { margin-top: clamp(8px, 1.5svh, 14px); }
