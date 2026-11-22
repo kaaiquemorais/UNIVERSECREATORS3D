@@ -26,6 +26,7 @@
     --wrap: 1200px;
     --gutter: clamp(16px, 4vw, 40px);
     --header-h: 64px;
+    --ticker-h: 42px;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -288,6 +289,30 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 90%, transparent 100%);
 }
+/* no topo o vidro é bem transparente (deixa a chuva Matrix aparecer
+   desfocada); ao rolar fica mais branco para os links serem legíveis
+   sobre qualquer seção, inclusive a faixa escura do contato */
+.site-header::before { transition: background-color 0.35s, -webkit-backdrop-filter 0.35s, backdrop-filter 0.35s; }
+.site-header.scrolled::before {
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: saturate(1.8) blur(20px);
+    backdrop-filter: saturate(1.8) blur(20px);
+}
+/* sobre a faixa azul-escura do contato o vidro fica escuro e o texto branco,
+   como o iPhone faz (classe on-dark controlada em script.js) */
+.site-header.on-dark::before { background: rgba(11, 26, 51, 0.55); }
+.site-header .brand-name,
+.site-header .nav-link,
+.site-header .nav-toggle { transition: color 0.35s, background-color 0.35s, border-color 0.35s; }
+.site-header.on-dark .brand-name { color: #fff; }
+.site-header.on-dark .brand-name span { color: var(--blue-light); }
+.site-header.on-dark .nav-link { color: rgba(255, 255, 255, 0.82); }
+.site-header.on-dark .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.site-header.on-dark .nav-toggle {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.22);
+}
 
 .header-inner {
     display: flex;
@@ -350,7 +375,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         transition: transform 0.45s var(--ease-out), visibility 0.45s, border-color 0.25s;
     }
     .js .site-header:not(.is-shown) { transform: translateY(-100%); visibility: hidden; }
-    .hero { height: 100svh; }
+    .hero { height: calc(100svh - var(--ticker-h)); }
 }
 
 /* =====================================================
@@ -362,12 +387,16 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .hero {
     position: relative;
     display: flex;
-    height: calc(100svh - var(--header-h));
+    /* PC: hero + faixa = exatamente a tela (o menu fica escondido na hero),
+       então o mascote fica apoiado na faixa e nada precisa de rolagem */
+    height: calc(100svh - var(--ticker-h));
     min-height: 520px;
     max-height: 1000px;
     overflow: hidden;
     background: #fff;
+    flex-direction: column;
 }
+.hero-inner { flex: 1 1 auto; min-height: 0; }
 
 /* PC: texto à esquerda, mascote à direita (com a chuva Matrix atrás).
    Celular (≤860px): mascote em cima, texto centralizado embaixo. */
@@ -388,9 +417,6 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     /* no PC a área do mascote passa um pouco da coluna para ele ficar grande */
     margin-inline: -14% -16%;
     /* degradê curto na base: o mascote "nasce" do branco */
-    /* mesma altura de antes, mas em curva suave (sem corte seco) */
-    -webkit-mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
 }
 
 /* chuva Matrix: só atrás do mascote */
@@ -482,7 +508,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     padding-block: 24px;
 }
 
-/* título sempre em 2 linhas: "Impressão 3D" / "personalizada" */
+/* título sempre em 2 linhas: "Impressão 3D personalizada" / "em São Paulo" */
 /* logo ao lado do nome */
 .hero-brand {
     gap: 12px;
@@ -515,6 +541,47 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 }
 
 
+
+/* Faixa fina no topo da 2ª seção (PC e celular): serviços e vantagens rodando sem parar
+   (não pausa no hover). 3 cópias da lista: anda 1/3 e recomeça sem emenda. */
+.hero-ticker {
+    position: relative;
+    z-index: 3;
+    flex: none;
+    overflow: hidden;
+    background: var(--blue);
+    color: #fff;
+    height: var(--ticker-h);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 -10px 30px -12px rgba(10, 108, 214, 0.45);
+}
+.ticker-track {
+    display: flex;
+    width: max-content;
+    animation: tickerScroll 45s linear infinite;
+}
+.ticker-group {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-right: 22px;
+    flex-shrink: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+.ticker-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.75);
+    flex-shrink: 0;
+}
+@keyframes tickerScroll {
+    to { transform: translateX(-33.3333%); }
+}
 
 /* =====================================================
    SEÇÕES — comum
@@ -845,6 +912,10 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     text-align: center;
 }
 
+/* rodapé: logo em cima do nome */
+.site-footer .brand { flex-direction: column; gap: 10px; }
+.site-footer .brand img { width: 48px; height: 48px; }
+
 .footer-links ul {
     display: flex;
     flex-wrap: wrap;
@@ -939,7 +1010,12 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         padding-top: 0;
         padding-bottom: clamp(18px, 4svh, 40px);
     }
-    .hero-figure { width: 100%; }
+    .hero-figure {
+        width: 100%;
+        /* mesma altura de antes, mas em curva suave (sem corte seco) */
+        -webkit-mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
+    }
     /* mascote começa abaixo do menu; a chuva ocupa a área toda */
     .hero-mascot, .hero-wing, .hero-shine { height: calc(100% - var(--header-h) - clamp(4px, 1.5svh, 16px)); }
     /* no celular o mascote ocupa quase toda a largura: a chuva Matrix
@@ -1054,6 +1130,6 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .btn-primary, .btn-primary::after { animation: none; }
+    .btn-primary, .btn-primary::after, .ticker-track { animation: none; }
     *, *::before, *::after { transition-duration: 0.01ms !important; }
 }

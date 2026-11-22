@@ -98,10 +98,18 @@ function initNavbar() {
 
     // PC: o menu só aparece quando a 2ª seção chega ao topo (CSS esconde na hero)
     const hero = document.getElementById('home');
+    const darkSections = document.querySelectorAll('.contact');
     const onScroll = () => {
         navbar.classList.toggle('scrolled', window.scrollY > 8);
         const pastHero = !hero || window.scrollY >= hero.offsetHeight - navbar.offsetHeight;
         navbar.classList.toggle('is-shown', pastHero);
+        // vidro escuro quando o menu está sobre uma seção escura (contato)
+        const mid = navbar.offsetHeight / 2;
+        const onDark = !menu?.classList.contains('open') && [...darkSections].some(s => {
+            const r = s.getBoundingClientRect();
+            return r.top <= mid && r.bottom >= mid;
+        });
+        navbar.classList.toggle('on-dark', onDark);
     };
     window.addEventListener('resize', onScroll);
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -113,6 +121,7 @@ function initNavbar() {
         menu.classList.toggle('open', open);
         toggle.setAttribute('aria-expanded', String(open));
         toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+        onScroll(); // menu aberto usa sempre o vidro claro
     };
 
     toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
