@@ -41,4 +41,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://3duniversecreators.netlify.app/sitemap.xml
+Sitemap: https://universecreators3d.netlify.app/sitemap.xml

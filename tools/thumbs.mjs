@@ -22,3 +22,11 @@ await sharp('logo/logo-3d.webp')
     .webp({ quality: 85 })
     .toFile('logo/logo-mark.webp');
 console.log('logo-mark ok');
+
+// mascote da hero também em 800px (celular de tela densa)
+await mkdir(path.join(SRC, '800'), { recursive: true });
+await sharp(path.join(SRC, 'mascote-alien-dragao.webp'))
+    .resize({ width: 800 })
+    .webp({ quality: 80 })
+    .toFile(path.join(SRC, '800', 'mascote-alien-dragao.webp'));
+console.log('mascote 800 ok');

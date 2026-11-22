@@ -35,7 +35,7 @@ Netlify **não conectado ao GitHub** — `git push` não publica. Deploy manual,
 netlify deploy --prod --dir=<pasta-limpa>
 ```
 
-Produção: https://3duniversecreators.netlify.app · repo `github.com/kaaiquemorais/3DNEW` (main).
+Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemorais/3DNEW` (main).
 
 ## Arquitetura
 
@@ -45,9 +45,9 @@ Produção: https://3duniversecreators.netlify.app · repo `github.com/kaaiquemo
 
 ### Comportamentos que o dono pediu (não desfazer)
 
-- **Hero (tela cheia, sem rolar, fundo branco)**: PC = logo (ícone **ao lado** do nome) + título + texto + botões à esquerda, mascote à direita; celular = mascote em cima, texto centralizado embaixo. A hero ocupa exatamente a tela (100svh). Logo abaixo, no topo da 2ª seção (PC e celular), uma faixa fina azul (`.hero-ticker`) com serviços/vantagens rodando sem parar (não pausa no hover). No PC o mascote encosta na base da hero, sem degradê; no celular ele sobe de um degradê suave (`mask-image` em `.hero-figure`, só no celular; no PC a área passa da coluna com `margin-inline` negativa — não faça o `img` vazar, o mask cortaria). Chuva Matrix azul num `<canvas>` **dentro** de `.hero-figure` (só atrás do mascote). Na asa do dragão, um brilho azul sutil varre a malha a cada 6s, e um shine lento (9s) atravessa o dragão inteiro (`.hero-shine`, máscara `logo/mascote-dragao-mask.webp`) (`.hero-wing`, recortado por `logo/mascote-asa-mask.webp` — máscara gerada da própria imagem, mesmo encaixe contain/base do `img`; se trocar o mascote, gere outra máscara).
+- **Hero (tela cheia, sem rolar, fundo branco)**: PC = logo (ícone **ao lado** do nome) + título + texto + botões à esquerda, mascote à direita; celular = mascote em cima, texto centralizado embaixo. A hero ocupa exatamente a tela (100svh). Logo abaixo, no topo da 2ª seção (PC e celular), uma faixa fina azul (`.hero-ticker`) com serviços/vantagens rodando sem parar (não pausa no hover). No PC a faixa também fica no topo da 2ª seção (abaixo da dobra) e o mascote encosta na base da hero, sem degradê; no celular ele sobe de um degradê suave (`mask-image` em `.hero-figure`, só no celular; no PC a área passa da coluna com `margin-inline` negativa — não faça o `img` vazar, o mask cortaria). Chuva Matrix azul num `<canvas>` **dentro** de `.hero-figure` (só atrás do mascote). Na asa do dragão, um brilho azul sutil varre a malha a cada 6s, e um shine lento (9s) atravessa o dragão inteiro (`.hero-shine`, máscara `logo/mascote-dragao-mask.webp`) (`.hero-wing`, recortado por `logo/mascote-asa-mask.webp` — máscara gerada da própria imagem, mesmo encaixe contain/base do `img`; se trocar o mascote, gere outra máscara).
 - **Título** sempre em 2 linhas: `.h1-line` "Impressão 3D personalizada" / "em São Paulo" (o dono já alternou entre esta e "Impressão 3D / personalizada"; esta é a atual), com `white-space: nowrap`; o tamanho é limitado para caber na coluna (testado de 320px a 1920px).
-- **Menu**: vidro fosco estilo iPhone num `::before` que some em degradê embaixo (**sem corte seco, sem risco**). No celular a hero sobe para trás do menu (`margin-top` negativa) e a chuva Matrix vai até o topo da tela, aparecendo desfocada pelo vidro. Ao rolar o vidro fica mais branco; sobre a faixa escura do contato vira vidro azul-escuro com texto branco (`.on-dark`, calculado em `initNavbar` pelas seções `.contact`). No PC fica escondido na hero, aparece a partir da 2ª seção (`.is-shown` em `initNavbar`). No celular, cabeçalho normal com hambúrguer.
+- **Menu**: vidro fosco estilo iPhone num `::before` que some em degradê embaixo (**sem corte seco, sem risco**). No celular a hero sobe para trás do menu (`margin-top` negativa) e a chuva Matrix vai até o topo da tela, aparecendo desfocada pelo vidro. O vidro é **só desfoque do fundo real, sem cor/tinta por cima** (pedido do dono); ao rolar o desfoque aumenta; sobre a faixa escura do contato o texto vira branco (`.on-dark`, calculado em `initNavbar` pelas seções `.contact`). No PC fica escondido na hero, aparece a partir da 2ª seção (`.is-shown` em `initNavbar`). No celular, cabeçalho normal com hambúrguer.
 - **WhatsApp flutuante** só no celular e só depois da hero (na hero cobria os botões).
 - **Serviços**: PC = carrossel arrastável com o mouse + setas + "Arraste para o lado"; celular = grade de 2 colunas centralizada (foto 3:4 inteira).
 - **Fotos** com neon azul no contorno; galeria em 3:4 (formato das fotos, quase sem corte); mostra 8 e "Ver mais trabalhos" (centralizado, sem link do Instagram ao lado) revela o resto.
@@ -59,9 +59,9 @@ Produção: https://3duniversecreators.netlify.app · repo `github.com/kaaiquemo
 ## SEO e buscadores de IA
 
 - Um `<h1>`; H2 por seção com palavra-chave; H3 em serviços/passos/perguntas. `<title>` ≤ 65 car., description ≤ 155.
-- JSON-LD: `WebSite`, `LocalBusiness`+`ProfessionalService` (serviços em `hasOfferCatalog`), `FAQPage`. **O FAQ do JSON-LD espelha o FAQ visível** (6 perguntas) — mudou um, mude o outro.
+- JSON-LD: `WebSite`, `LocalBusiness`+`ProfessionalService` (serviços em `hasOfferCatalog`), `FAQPage`. **O FAQ do JSON-LD espelha o FAQ visível** (8 perguntas; o `llms.txt` tem a mesma lista) — mudou um, mude o outro.
 - `robots.txt` libera robôs de IA (GPTBot, OAI-SearchBot, Google-Extended, ClaudeBot, PerplexityBot…); `llms.txt` resume o negócio; `sitemap.xml` com imagens — atualize `lastmod` e o `llms.txt` quando o conteúdo mudar.
-- Palavras-chave (Ubersuggest BR, nov/2026): "impressão 3d personalizada" 1.600/mês, "impressão 3d perto de mim" 1.300, "serviço de impressão 3d" 1.000, "maquete 3d" 1.000, "impressão 3d são paulo" 390, "prototipagem 3d" 210. Concorrente no topo para SP: printit3d.com.br.
+- Palavras-chave (Ubersuggest BR, nov/2026): "impressão 3d personalizada" 1.600/mês, "impressão 3d perto de mim" 1.300, "serviço de impressão 3d" 1.000, "maquete 3d" 1.000, "impressão 3d são paulo" 390, "prototipagem 3d" 210. "empresa de impressão 3d" 480 (SD 18), "quanto custa impressão 3d" 320 (SD 8), "onde fazer impressão 3d" 90. Autocompletar: "onde fazer impressão 3d em são paulo", "sob encomenda/sob medida". Em nov/2026 o domínio tinha 0 palavras ranqueadas (site novo em .netlify.app). Concorrente no topo para SP: printit3d.com.br.
 
 ## Verificação visual
 

@@ -283,24 +283,21 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     inset: 0 0 -28px 0;
     z-index: -1;
     pointer-events: none;
-    background: rgba(255, 255, 255, 0.42);
-    -webkit-backdrop-filter: saturate(1.8) blur(10px);
-    backdrop-filter: saturate(1.8) blur(10px);
+    /* só desfoque do fundo real, sem cor por cima (pedido do dono) */
+    background: transparent;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 90%, transparent 100%);
 }
-/* no topo o vidro é bem transparente (deixa a chuva Matrix aparecer
-   desfocada); ao rolar fica mais branco para os links serem legíveis
-   sobre qualquer seção, inclusive a faixa escura do contato */
+/* ao rolar, o desfoque fica mais forte */
 .site-header::before { transition: background-color 0.35s, -webkit-backdrop-filter 0.35s, backdrop-filter 0.35s; }
 .site-header.scrolled::before {
-    background: rgba(255, 255, 255, 0.72);
-    -webkit-backdrop-filter: saturate(1.8) blur(20px);
-    backdrop-filter: saturate(1.8) blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
 }
-/* sobre a faixa azul-escura do contato o vidro fica escuro e o texto branco,
-   como o iPhone faz (classe on-dark controlada em script.js) */
-.site-header.on-dark::before { background: rgba(11, 26, 51, 0.55); }
+/* sobre a faixa azul-escura do contato o texto fica branco
+   (classe on-dark controlada em script.js) */
 .site-header .brand-name,
 .site-header .nav-link,
 .site-header .nav-toggle { transition: color 0.35s, background-color 0.35s, border-color 0.35s; }
@@ -375,7 +372,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         transition: transform 0.45s var(--ease-out), visibility 0.45s, border-color 0.25s;
     }
     .js .site-header:not(.is-shown) { transform: translateY(-100%); visibility: hidden; }
-    .hero { height: calc(100svh - var(--ticker-h)); }
+    .hero { height: 100svh; }
 }
 
 /* =====================================================
@@ -387,9 +384,9 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .hero {
     position: relative;
     display: flex;
-    /* PC: hero + faixa = exatamente a tela (o menu fica escondido na hero),
-       então o mascote fica apoiado na faixa e nada precisa de rolagem */
-    height: calc(100svh - var(--ticker-h));
+    /* PC: a hero ocupa a tela inteira (o menu fica escondido nela);
+       a faixa de serviços começa logo abaixo, no topo da 2ª seção */
+    height: 100svh;
     min-height: 520px;
     max-height: 1000px;
     overflow: hidden;
@@ -443,7 +440,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     object-position: center bottom;
 }
 @media (prefers-reduced-motion: no-preference) {
-    .hero-mascot { animation: mascotRise 1.2s var(--ease-out) both; }
+    .hero-mascot { animation: mascotRiseSolid 1.2s var(--ease-out) both; }
 }
 
 /* Asa do dragão: um brilho azul sutil varre a malha holográfica da asa.
@@ -492,6 +489,11 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 @keyframes wingScan {
     0%        { background-position: 100% 0; }
     55%, 100% { background-position: 0% 0; }
+}
+/* versão sem opacidade para o <img>: ele já nasce visível (melhor LCP) */
+@keyframes mascotRiseSolid {
+    from { transform: translateY(8%); }
+    to   { transform: translateY(0); }
 }
 @keyframes mascotRise {
     from { transform: translateY(8%); opacity: 0; }
@@ -588,6 +590,13 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
    ===================================================== */
 .section { padding: clamp(64px, 9vw, 120px) 0; border-top: 1px solid var(--line); }
 .hero + .section { border-top: 0; }
+
+/* desempenho: o navegador só desenha estas seções quando chegam perto da
+   tela (serviços fica de fora: o carrossel mede a largura ao carregar) */
+.work, .process, .faq, .contact {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+}
 
 .section-intro h2 { font-size: clamp(1.55rem, 1.2rem + 1.3vw, 2.15rem); }
 .section-intro p {

@@ -1,6 +1,6 @@
 # Universe Creators 3D
 
-> Estúdio de impressão 3D personalizada em São Paulo (SP), Brasil. Faz modelagem 3D, maquetes, prototipagem, peças decorativas e cenografia, com envio para todo o Brasil. Slogan: "Imprimindo uma parte do seu universo". Orçamentos pelo WhatsApp (11) 98303-1609.
+> Empresa e estúdio de impressão 3D personalizada em São Paulo (SP), Brasil. Serviço de impressão 3D sob encomenda e sob medida. Faz modelagem 3D, maquetes, prototipagem, peças decorativas e cenografia, com envio para todo o Brasil. Slogan: "Imprimindo uma parte do seu universo". Orçamentos pelo WhatsApp (11) 98303-1609.
 
 ## Serviços
 
@@ -22,9 +22,43 @@
 - Atendimento: São Paulo (SP) e envio para todo o Brasil.
 - Preço e prazo: variam conforme tamanho, tempo de impressão, material e modelagem; informados no orçamento.
 
+## Perguntas frequentes
+
+### Quanto custa uma impressão 3D?
+
+O preço depende do tamanho da peça, do tempo de impressão, da quantidade de material e de precisar ou não de modelagem 3D. Envie uma foto, desenho ou arquivo pelo WhatsApp (11) 98303-1609 e a Universe Creators 3D responde com o valor e o prazo do seu projeto.
+
+### Onde fazer impressão 3D em São Paulo?
+
+Na Universe Creators 3D, estúdio de impressão 3D em São Paulo (SP). O pedido é feito pelo WhatsApp (11) 98303-1609: você envia a ideia, uma foto ou o arquivo 3D e recebe o orçamento. Também enviamos para todo o Brasil.
+
+### Vocês fazem impressão 3D sob encomenda?
+
+Sim. Na Universe Creators 3D cada peça é feita sob encomenda e sob medida: chaveiros, troféus, suportes, cases, maquetes, peças decorativas e cenografia, a partir da sua ideia ou do seu arquivo.
+
+### Preciso ter um arquivo 3D para pedir uma impressão?
+
+Não. Se você tem só a ideia, uma foto, um esboço ou as medidas, a Universe Creators 3D faz a modelagem 3D e envia para sua aprovação antes de imprimir.
+
+### Quais formatos de arquivo vocês aceitam?
+
+Arquivos STL, OBJ e 3MF. Se o arquivo estiver em outro formato, envie mesmo assim para avaliação.
+
+### Quanto tempo leva para a peça ficar pronta?
+
+Depende do tamanho, da quantidade e de ser preciso modelar a peça. O prazo exato é informado junto com o orçamento.
+
+### Vocês atendem fora de São Paulo?
+
+Sim. A Universe Creators 3D fica em São Paulo (SP) e envia para todo o Brasil.
+
+### Vocês fazem maquetes em impressão 3D?
+
+Sim. A Universe Creators 3D imprime maquetes e réplicas em escala a partir de arquivos 3D, plantas ou imagens de referência, para apresentações, estudos e decoração.
+
 ## Contato
 
-- Site: https://3duniversecreators.netlify.app/
+- Site: https://universecreators3d.netlify.app/
 - WhatsApp e telefone: +55 11 98303-1609 (https://wa.me/5511983031609)
 - E-mail: contato@universecreators3d.com.br
 - Instagram: https://instagram.com/3duniversecreators
