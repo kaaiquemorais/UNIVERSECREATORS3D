@@ -863,6 +863,9 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 }
 .faq-list summary::-webkit-details-marker { display: none; }
 .faq-list summary h3 {
+    /* quebra normal (o "equilibrado" dos títulos separava mal as perguntas);
+       palavra solta no fim continua evitada pelo initNoOrphans */
+    text-wrap: wrap;
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 600;
