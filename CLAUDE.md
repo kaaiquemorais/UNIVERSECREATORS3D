@@ -31,11 +31,11 @@ Netlify **não conectado ao GitHub** — `git push` não publica. Deploy manual,
 
 ```bash
 # pasta limpa com: index.html, style.css, script.js, robots.txt, sitemap.xml,
-# llms.txt, galeria/ (com galeria/600/), logo/   — nunca node_modules/, tools/, *.md
+# llms.txt, galeria/ (com 600/ e 800/), logo/, fonts/   — nunca node_modules/, tools/, *.md
 netlify deploy --prod --dir=<pasta-limpa>
 ```
 
-Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemorais/3DNEW` (main).
+Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemorais/UNIVERSECREATORS3D` (main).
 
 ## Arquitetura
 
@@ -54,7 +54,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
 - No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
-- Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto). Letras pequenas de propósito.
+- Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto), **hospedadas em `fonts/`** (woff2 variável, só subconjunto latino) com `@font-face` no topo do style.css e preload no head — não voltar para o Google Fonts (custava velocidade). Letras pequenas de propósito.
 
 ## SEO e buscadores de IA
 
