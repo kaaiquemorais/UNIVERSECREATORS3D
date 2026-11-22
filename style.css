@@ -1100,7 +1100,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     }
     .hero-figure {
         width: 100%;
-        height: clamp(200px, 42svh, 400px);
+        height: clamp(220px, 50svh, 470px);
     }
     /* degradê suave só no mascote (a chuva fica livre para subir) */
     .hero-mascot-wrap {
@@ -1208,6 +1208,11 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     .site-footer { padding: 28px 0 30px; }
     .footer-inner { gap: 12px; }
     .footer-copy { margin-top: 2px; }
+}
+
+/* celular de tela bem baixa (ex.: iPhone SE antigo com a barra do Safari) */
+@media (max-width: 860px) and (max-height: 500px) {
+    .hero-figure { height: clamp(180px, 40svh, 260px); }
 }
 
 /* celular bem estreito (320–374px): só o botão principal na hero */
