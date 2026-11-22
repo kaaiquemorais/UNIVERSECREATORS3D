@@ -56,7 +56,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **Não usar `content-visibility`** nas seções: o tamanho reservado (`contain-intrinsic-size`) deixou a faixa do contato com ~200px azuis vazios no celular.
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
 - No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
-- O "3D" do nome (`.brand-name span`) tem shine passando a cada 4s, como no link tree.
+- Shine de texto (`textShine`, 4s): "3D" do nome (`.brand-name span`), links com `.link-shine` ("Falar sobre meu projeto", "Pergunte no WhatsApp") e números dos passos (`.step-num`, escalonados 1→4).
 - Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto), **hospedadas em `fonts/`** (woff2 variável, só subconjunto latino) com `@font-face` no topo do style.css e preload no head — não voltar para o Google Fonts (custava velocidade). Letras pequenas de propósito.
 
 ## SEO e buscadores de IA

@@ -271,6 +271,20 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .link-arrow svg { transition: transform 0.25s var(--ease-out); }
 .link-arrow:hover svg { transform: translateX(3px); }
 
+/* shine passando no texto (mesmo efeito do "3D" do nome) */
+.link-shine {
+    background: linear-gradient(100deg,
+        var(--blue-ink) 0%, var(--blue-ink) 38%,
+        var(--blue-light) 45%, #ffffff 50%, var(--blue-light) 55%,
+        var(--blue-ink) 62%, var(--blue-ink) 100%) 0 0 / 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .link-shine { animation: textShine 4s ease-in-out infinite; }
+}
+
 /* =====================================================
    NEON AZUL NO CONTORNO DAS FOTOS (pedido do dono)
    ===================================================== */
@@ -467,6 +481,9 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     -webkit-mask-image: radial-gradient(ellipse 58% 58% at 50% 46%, #000 35%, transparent 85%);
     mask-image: radial-gradient(ellipse 58% 58% at 50% 46%, #000 35%, transparent 85%);
 }
+
+/* camada do mascote + efeitos (a chuva Matrix fica fora dela) */
+.hero-mascot-wrap { position: absolute; inset: 0; }
 
 .hero-mascot,
 .hero-wing,
@@ -837,6 +854,22 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     font-size: 0.875rem;
     color: var(--blue-ink);
 }
+/* shine nos números, passando de um passo para o outro (1 → 4) */
+.step-num {
+    background: linear-gradient(100deg,
+        var(--blue-ink) 0%, var(--blue-ink) 38%,
+        var(--blue-light) 45%, #ffffff 50%, var(--blue-light) 55%,
+        var(--blue-ink) 62%, var(--blue-ink) 100%) 0 0 / 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .step-num { animation: textShine 4s ease-in-out infinite; }
+    .step:nth-child(2) .step-num { animation-delay: 0.35s; }
+    .step:nth-child(3) .step-num { animation-delay: 0.7s; }
+    .step:nth-child(4) .step-num { animation-delay: 1.05s; }
+}
 .step h3 { margin-top: 18px; font-size: 1.0625rem; }
 .step p { margin-top: 6px; font-size: 0.9375rem; color: var(--ink-2); }
 
@@ -1053,30 +1086,36 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
         min-height: 0;
         max-height: none;
     }
+    /* bloco (mascote + texto) centralizado na altura da tela, abaixo do menu:
+       espaço igual em cima e embaixo */
     .hero-inner {
         grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: minmax(170px, 1fr) auto;
-        grid-template-areas: "figure" "copy";
+        grid-template-rows: 1fr auto auto 1fr;
+        grid-template-areas: "." "figure" "copy" ".";
         justify-items: center;
         gap: 0;
         min-height: 100svh;
-        padding-top: 0;
-        padding-bottom: clamp(18px, 4svh, 40px);
+        padding-top: var(--header-h);
+        padding-bottom: 0;
     }
     .hero-figure {
         width: 100%;
-        /* mesma altura de antes, mas em curva suave (sem corte seco) */
+        height: clamp(200px, 42svh, 400px);
+    }
+    /* degradê suave só no mascote (a chuva fica livre para subir) */
+    .hero-mascot-wrap {
         -webkit-mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
         mask-image: linear-gradient(to bottom, #000 80%, rgba(0,0,0,0.94) 83%, rgba(0,0,0,0.82) 86%, rgba(0,0,0,0.64) 89%, rgba(0,0,0,0.44) 92%, rgba(0,0,0,0.25) 95%, rgba(0,0,0,0.1) 98%, transparent 100%);
     }
-    /* mascote começa abaixo do menu; a chuva ocupa a área toda */
-    .hero-mascot, .hero-wing, .hero-shine { height: calc(100% - var(--header-h) - clamp(4px, 1.5svh, 16px)); }
+    .hero-mascot, .hero-wing, .hero-shine { height: 100%; }
     /* no celular o mascote ocupa quase toda a largura: a chuva Matrix
        precisa aparecer forte nas laterais e no alto, em volta dele */
     .hero-matrix {
         opacity: 1;
-        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
-        mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
+        top: -100svh;                      /* sobe até o topo da tela */
+        height: calc(100% + 100svh);
+        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 80%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 0%, #000 80%, transparent 100%);
     }
     .hero-figure { margin-inline: 0; }
     .hero-brand { display: none; }
