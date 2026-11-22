@@ -258,8 +258,10 @@ function initNoOrphans() {
             const idx = trimmed.lastIndexOf(' ');
             if (idx > 0) {
                 nodes[i].nodeValue = trimmed.slice(0, idx) + NBSP + trimmed.slice(idx + 1) + text.slice(trimmed.length);
-            } else if (i > 0 && /\s$/.test(nodes[i - 1].nodeValue)) {
+            } else if (i > 0 && /\S\s+$/.test(nodes[i - 1].nodeValue)) {
                 // última palavra está sozinha num <strong>/<a>: cola no texto anterior
+                // (só se o texto anterior tiver palavra: um espaço solto entre
+                // blocos, como entre as linhas do título, não pode virar nbsp)
                 nodes[i - 1].nodeValue = nodes[i - 1].nodeValue.replace(/\s+$/, NBSP);
             }
             break;
