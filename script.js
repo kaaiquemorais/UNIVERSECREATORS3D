@@ -1,327 +1,277 @@
+const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // =============================================
-// HERO MAGIC RINGS (WebGL)
-// Porte do componente MagicRings (reactbits.dev) para WebGL puro
+// HERO: chuva "Matrix" azul em fundo branco, atrás do mascote
 // =============================================
-const RINGS_VERT = `
-attribute vec2 position;
-void main() {
-    gl_Position = vec4(position, 0.0, 1.0);
-}
-`;
-
-const RINGS_FRAG = `
-precision highp float;
-
-uniform float uTime, uAttenuation, uLineThickness;
-uniform float uBaseRadius, uRadiusStep, uScaleRate;
-uniform float uOpacity, uNoiseAmount, uRotation, uRingGap;
-uniform float uFadeIn, uFadeOut;
-uniform float uMouseInfluence, uHoverAmount, uHoverScale, uParallax, uBurst;
-uniform vec2 uResolution, uMouse;
-uniform vec3 uColor, uColorTwo;
-uniform int uRingCount;
-
-const float HP = 1.5707963;
-const float CYCLE = 3.45;
-
-float fade(float t) {
-    return t < uFadeIn ? smoothstep(0.0, uFadeIn, t) : 1.0 - smoothstep(uFadeOut, CYCLE - 0.2, t);
-}
-
-float ring(vec2 p, float ri, float cut, float t0, float px) {
-    float t = mod(uTime + t0, CYCLE);
-    float r = ri + t / CYCLE * uScaleRate;
-    float d = abs(length(p) - r);
-    float a = atan(abs(p.y), abs(p.x)) / HP;
-    float th = max(1.0 - a, 0.5) * px * uLineThickness;
-    float h = (1.0 - smoothstep(th, th * 1.5, d)) + 1.0;
-    d += pow(cut * a, 3.0) * r;
-    return h * exp(-uAttenuation * d) * fade(t);
-}
-
-void main() {
-    float px = 1.0 / min(uResolution.x, uResolution.y);
-    vec2 p = (gl_FragCoord.xy - 0.5 * uResolution.xy) * px;
-    float cr = cos(uRotation), sr = sin(uRotation);
-    p = mat2(cr, -sr, sr, cr) * p;
-    p -= uMouse * uMouseInfluence;
-    float sc = mix(1.0, uHoverScale, uHoverAmount) + uBurst * 0.3;
-    p /= sc;
-    vec3 c = vec3(0.0);
-    float rcf = max(float(uRingCount) - 1.0, 1.0);
-    for (int i = 0; i < 10; i++) {
-        if (i >= uRingCount) break;
-        float fi = float(i);
-        vec2 pr = p - fi * uParallax * uMouse;
-        vec3 rc = mix(uColor, uColorTwo, fi / rcf);
-        c = mix(c, rc, vec3(ring(pr, uBaseRadius + fi * uRadiusStep, pow(uRingGap, fi), i == 0 ? 0.0 : 2.95 * fi, px)));
-    }
-    c *= 1.0 + uBurst * 2.0;
-    float n = fract(sin(dot(gl_FragCoord.xy + uTime * 100.0, vec2(12.9898, 78.233))) * 43758.5453);
-    c += (n - 0.5) * uNoiseAmount;
-    gl_FragColor = vec4(c, max(c.r, max(c.g, c.b)) * uOpacity);
-}
-`;
-
-// Configuração — tons de azul da identidade
-const RINGS_CONFIG = {
-    color: '#0066FF',
-    colorTwo: '#00D4FF',
-    speed: 1,
-    ringCount: 6,
-    attenuation: 9,
-    lineThickness: 2,
-    baseRadius: 0.32,
-    radiusStep: 0.11,
-    scaleRate: 0.1,
-    opacity: 1,
-    noiseAmount: 0.08,
-    rotation: 0,
-    ringGap: 1.5,
-    fadeIn: 0.7,
-    fadeOut: 0.5,
-    // sem interação de mouse — os anéis ficam sempre centralizados
-    followMouse: false,
-    mouseInfluence: 0,
-    parallax: 0,
+const MATRIX_CONFIG = {
+    chars: 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ0123456789ABCDEF3D',
+    color: '#0a6cd6',     // azul da marca
+    highlight: '#7cc4ff', // alguns caracteres mais claros
+    fade: 'rgba(255, 255, 255, 0.08)', // rastro: quanto maior, mais curto
+    fps: 20,
 };
 
-function hexToRgb(hex) {
-    return [
-        parseInt(hex.slice(1, 3), 16) / 255,
-        parseInt(hex.slice(3, 5), 16) / 255,
-        parseInt(hex.slice(5, 7), 16) / 255,
-    ];
-}
-
-function initHeroRings() {
-    const canvas = document.getElementById('heroRings');
+function initHeroMatrix() {
+    const canvas = document.getElementById('heroMatrix');
     if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    const gl = canvas.getContext('webgl', {
-        alpha: true,
-        antialias: false,
-        depth: false,
-        stencil: false,
-        premultipliedAlpha: false,
-        powerPreference: 'high-performance',
-    });
-
-    // Sem WebGL: fica só o brilho radial do CSS
-    if (!gl) {
-        canvas.style.display = 'none';
-        return;
-    }
-
-    function compile(type, src) {
-        const sh = gl.createShader(type);
-        gl.shaderSource(sh, src);
-        gl.compileShader(sh);
-        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-            console.error(gl.getShaderInfoLog(sh));
-            gl.deleteShader(sh);
-            return null;
-        }
-        return sh;
-    }
-
-    const vs = compile(gl.VERTEX_SHADER, RINGS_VERT);
-    const fs = compile(gl.FRAGMENT_SHADER, RINGS_FRAG);
-    if (!vs || !fs) {
-        canvas.style.display = 'none';
-        return;
-    }
-
-    const program = gl.createProgram();
-    gl.attachShader(program, vs);
-    gl.attachShader(program, fs);
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error(gl.getProgramInfoLog(program));
-        canvas.style.display = 'none';
-        return;
-    }
-    gl.useProgram(program);
-
-    // Triângulo full-screen
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const posLoc = gl.getAttribLocation(program, 'position');
-    gl.enableVertexAttribArray(posLoc);
-    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-
-    const u = {};
-    ['uTime', 'uAttenuation', 'uLineThickness', 'uBaseRadius', 'uRadiusStep', 'uScaleRate',
-     'uOpacity', 'uNoiseAmount', 'uRotation', 'uRingGap', 'uFadeIn', 'uFadeOut',
-     'uMouseInfluence', 'uHoverAmount', 'uHoverScale', 'uParallax', 'uBurst',
-     'uResolution', 'uMouse', 'uColor', 'uColorTwo', 'uRingCount'
-    ].forEach(name => { u[name] = gl.getUniformLocation(program, name); });
-
-    const cfg = RINGS_CONFIG;
-    gl.uniform3fv(u.uColor, hexToRgb(cfg.color));
-    gl.uniform3fv(u.uColorTwo, hexToRgb(cfg.colorTwo));
-    gl.uniform1i(u.uRingCount, cfg.ringCount);
-    gl.uniform1f(u.uAttenuation, cfg.attenuation);
-    gl.uniform1f(u.uLineThickness, cfg.lineThickness);
-    gl.uniform1f(u.uBaseRadius, cfg.baseRadius);
-    gl.uniform1f(u.uRadiusStep, cfg.radiusStep);
-    gl.uniform1f(u.uScaleRate, cfg.scaleRate);
-    gl.uniform1f(u.uOpacity, cfg.opacity);
-    gl.uniform1f(u.uNoiseAmount, cfg.noiseAmount);
-    gl.uniform1f(u.uRotation, (cfg.rotation * Math.PI) / 180);
-    gl.uniform1f(u.uRingGap, cfg.ringGap);
-    gl.uniform1f(u.uFadeIn, cfg.fadeIn);
-    gl.uniform1f(u.uFadeOut, cfg.fadeOut);
-    gl.uniform1f(u.uMouseInfluence, cfg.followMouse ? cfg.mouseInfluence : 0);
-    gl.uniform1f(u.uParallax, cfg.parallax);
-    gl.uniform1f(u.uHoverAmount, 0);
-    gl.uniform1f(u.uHoverScale, 1);
-    gl.uniform1f(u.uBurst, 0);
-
-    gl.clearColor(0, 0, 0, 0);
-    gl.enable(gl.BLEND);
-    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-
+    const cfg = MATRIX_CONFIG;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0, size = 16, drops = [];
+    let frameId = 0, last = 0, visible = true;
 
     function resize() {
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
+        w = canvas.clientWidth;
+        h = canvas.clientHeight;
         if (!w || !h) return;
-
-        const pw = Math.round(w * dpr);
-        const ph = Math.round(h * dpr);
-        if (canvas.width !== pw || canvas.height !== ph) {
-            canvas.width = pw;
-            canvas.height = ph;
-        }
-        gl.viewport(0, 0, pw, ph);
-        gl.uniform2f(u.uResolution, pw, ph);
+        size = w < 600 ? 13 : 16; // no celular, colunas mais juntas = chuva mais densa
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, w, h);
+        const cols = Math.ceil(w / size);
+        drops = Array.from({ length: cols }, () => Math.random() * (h / size));
+        // já começa com a tela "chovendo", sem esperar as colunas caírem
+        for (let i = 0; i < 24; i++) draw();
     }
 
-    gl.uniform2f(u.uMouse, 0, 0);
+    function draw() {
+        ctx.fillStyle = cfg.fade;
+        ctx.fillRect(0, 0, w, h);
+        ctx.font = `500 ${size}px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace`;
+        for (let i = 0; i < drops.length; i++) {
+            const ch = cfg.chars[(Math.random() * cfg.chars.length) | 0];
+            const y = drops[i] * size;
+            ctx.fillStyle = Math.random() > 0.96 ? cfg.highlight : cfg.color;
+            ctx.fillText(ch, i * size, y);
+            if (y > h && Math.random() > 0.975) drops[i] = 0;
+            drops[i] += 1;
+        }
+    }
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let elapsed = 0;
-    let lastT = 0;
-    let frameId = 0;
-    let isVisible = false;
-
-    function frame(t) {
-        frameId = requestAnimationFrame(frame);
-
-        const dt = lastT === 0 ? 0 : Math.min(t - lastT, 100);
-        lastT = t;
-        elapsed += dt * 0.001 * cfg.speed * (reduceMotion ? 0.35 : 1);
-
-        gl.uniform1f(u.uTime, elapsed);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    function loop(t) {
+        frameId = requestAnimationFrame(loop);
+        if (t - last < 1000 / cfg.fps) return;
+        last = t;
+        draw();
     }
 
     function start() {
-        if (isVisible && !document.hidden && frameId === 0) {
-            lastT = 0;
-            frameId = requestAnimationFrame(frame);
-        }
+        if (frameId || !visible || document.hidden) return;
+        frameId = requestAnimationFrame(loop);
     }
-
     function stop() {
-        if (frameId !== 0) {
-            cancelAnimationFrame(frameId);
-            frameId = 0;
-        }
+        cancelAnimationFrame(frameId);
+        frameId = 0;
     }
 
-    new ResizeObserver(resize).observe(canvas);
     resize();
+    new ResizeObserver(() => { resize(); if (REDUCE_MOTION) for (let i = 0; i < 60; i++) draw(); })
+        .observe(canvas);
 
-    // Só anima com a hero visível e a aba ativa
+    // Sem movimento: desenha um quadro parado e não anima
+    if (REDUCE_MOTION) {
+        for (let i = 0; i < 60; i++) draw();
+        return;
+    }
+
     new IntersectionObserver(([entry]) => {
-        isVisible = entry.isIntersecting;
-        isVisible ? start() : stop();
-    }, { threshold: 0 }).observe(canvas);
-
-    document.addEventListener('visibilitychange', () => {
-        document.hidden ? stop() : start();
-    });
+        visible = entry.isIntersecting;
+        visible ? start() : stop();
+    }).observe(canvas);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    start();
 }
 
 // =============================================
-// NAVBAR
+// CABEÇALHO: borda ao rolar + menu do celular
 // =============================================
 function initNavbar() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
 
-    const hamburger = document.getElementById('navHamburger');
+    const toggle = document.getElementById('navHamburger');
     const menu = document.getElementById('navMenu');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 60) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+    // PC: o menu só aparece quando a 2ª seção chega ao topo (CSS esconde na hero)
+    const hero = document.getElementById('home');
+    const onScroll = () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 8);
+        const pastHero = !hero || window.scrollY >= hero.offsetHeight - navbar.offsetHeight;
+        navbar.classList.toggle('is-shown', pastHero);
+    };
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    if (!toggle || !menu) return;
+
+    const setOpen = (open) => {
+        menu.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    };
+
+    toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
+    menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('click', (e) => {
+        if (!navbar.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) {
+            setOpen(false);
+            toggle.focus();
         }
-    }, { passive: true });
-
-    if (hamburger && menu) {
-        hamburger.addEventListener('click', () => {
-            const open = menu.classList.toggle('open');
-            hamburger.classList.toggle('active', open);
-            hamburger.setAttribute('aria-expanded', String(open));
-        });
-
-        menu.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.remove('open');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!navbar.contains(e.target) && menu.classList.contains('open')) {
-                menu.classList.remove('open');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
+    });
 }
 
 // =============================================
-// SCROLL REVEAL
+// WHATSAPP FLUTUANTE: só aparece depois da hero
+// (na hero ele cobriria os botões no celular)
 // =============================================
-function initScrollReveal() {
-    const reveals = document.querySelectorAll('.servico-card, .portfolio-card, .contato-card, .why-item');
-    reveals.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+function initFloatingWhatsapp() {
+    const hero = document.getElementById('home');
+    const float = document.querySelector('.whatsapp-float');
+    if (!hero || !float) return;
+    new IntersectionObserver(([entry]) => {
+        float.classList.toggle('is-hidden', entry.isIntersecting);
+    }, { threshold: 0.25 }).observe(hero);
+}
+
+// =============================================
+// SERVIÇOS: carrossel arrastável (só no computador, >860px)
+// No celular a mesma lista vira uma lista vertical pelo CSS.
+// =============================================
+function initServiceCarousel() {
+    const track = document.getElementById('serviceTrack');
+    if (!track) return;
+    const [prev, next] = document.querySelectorAll('.carousel-btn');
+    const desktop = window.matchMedia('(min-width: 861px)');
+
+    const stepSize = () => {
+        const card = track.querySelector('.service');
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+    };
+
+    const update = () => {
+        const max = track.scrollWidth - track.clientWidth - 2;
+        const atStart = track.scrollLeft <= 2;
+        const atEnd = track.scrollLeft >= max;
+        track.classList.toggle('at-start', atStart);
+        track.classList.toggle('at-end', atEnd);
+        if (prev) prev.disabled = atStart;
+        if (next) next.disabled = atEnd;
+    };
+
+    [prev, next].forEach(btn => btn && btn.addEventListener('click', () => {
+        track.scrollBy({ left: stepSize() * Number(btn.dataset.dir), behavior: REDUCE_MOTION ? 'auto' : 'smooth' });
+    }));
+
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    // Arrastar com o mouse (no toque o navegador já rola sozinho)
+    let down = false, moved = false, startX = 0, startLeft = 0;
+
+    track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0 || !desktop.matches) return;
+        down = true;
+        moved = false;
+        startX = e.clientX;
+        startLeft = track.scrollLeft;
     });
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, i * 80);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    window.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (!moved && Math.abs(dx) > 4) {
+            moved = true;
+            track.classList.add('is-dragging');
+        }
+        if (moved) {
+            e.preventDefault();
+            track.scrollLeft = startLeft - dx;
+        }
+    });
 
-    reveals.forEach(el => observer.observe(el));
+    const endDrag = (e) => {
+        if (!down) return;
+        down = false;
+        if (!moved) return;
+        // solta no card mais próximo; um puxão curto já avança um card
+        const step = stepSize();
+        const dx = (e && e.clientX !== undefined) ? e.clientX - startX : 0;
+        let index = Math.round(track.scrollLeft / step);
+        const startIndex = Math.round(startLeft / step);
+        if (index === startIndex && Math.abs(dx) > 50) index += dx < 0 ? 1 : -1;
+        track.classList.remove('is-dragging');
+        track.scrollTo({ left: Math.max(0, index * step), behavior: REDUCE_MOTION ? 'auto' : 'smooth' });
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+
+    // evita "clique" acidental depois de arrastar
+    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 }
 
 // =============================================
-// INIT
+// GALERIA: "Ver mais trabalhos"
+// Sem JS todas as fotos aparecem; com JS começa com 8.
 // =============================================
+function initGallery() {
+    const gallery = document.getElementById('gallery');
+    const button = document.getElementById('galleryMore');
+    if (!gallery || !button) return;
+    if (!gallery.querySelector('.is-extra')) return;
+
+    button.hidden = false;
+    button.addEventListener('click', () => {
+        const open = gallery.classList.toggle('is-open');
+        button.setAttribute('aria-expanded', String(open));
+        button.textContent = open ? 'Mostrar menos' : 'Ver mais trabalhos';
+        if (!open) gallery.scrollIntoView({ block: 'start' });
+    });
+}
+
+// =============================================
+// SEM PALAVRA SOZINHA NA ÚLTIMA LINHA
+// Troca o último espaço de cada texto por espaço fixo (nbsp), assim as
+// duas últimas palavras sempre quebram juntas. Regra do dono do site.
+// =============================================
+function initNoOrphans() {
+    const NBSP = ' ';
+    const targets = document.querySelectorAll('h1, h2, h3, p, figcaption, .hero-facts li, .contact-list span');
+    targets.forEach(el => {
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        // do fim para o começo, pulando trechos só de pontuação (ex.: "." depois de um link)
+        for (let i = nodes.length - 1; i >= 0; i--) {
+            const text = nodes[i].nodeValue;
+            if (/^[\s.,;:!?)]*$/.test(text)) continue;
+            const trimmed = text.replace(/\s+$/, '');
+            const idx = trimmed.lastIndexOf(' ');
+            if (idx > 0) {
+                nodes[i].nodeValue = trimmed.slice(0, idx) + NBSP + trimmed.slice(idx + 1) + text.slice(trimmed.length);
+            } else if (i > 0 && /\s$/.test(nodes[i - 1].nodeValue)) {
+                // última palavra está sozinha num <strong>/<a>: cola no texto anterior
+                nodes[i - 1].nodeValue = nodes[i - 1].nodeValue.replace(/\s+$/, NBSP);
+            }
+            break;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    initHeroRings();
+    initNoOrphans();
+    initHeroMatrix();
     initNavbar();
-    initScrollReveal();
+    initFloatingWhatsapp();
+    initServiceCarousel();
+    initGallery();
 });

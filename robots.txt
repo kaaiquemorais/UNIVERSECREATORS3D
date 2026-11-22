@@ -1,0 +1,44 @@
+# Universe Creators 3D — impressão 3D em São Paulo
+# Liberado para buscadores e para os robôs dos assistentes de IA
+# (ChatGPT, Gemini, Claude, Perplexity, Copilot), para que possam citar o site.
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://3duniversecreators.netlify.app/sitemap.xml

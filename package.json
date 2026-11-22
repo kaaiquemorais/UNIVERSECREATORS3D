@@ -5,7 +5,8 @@
   "description": "Site institucional 3D Universe Creators (HTML/CSS/JS estatico)",
   "scripts": {
     "dev": "live-server --port=5173 --no-browser",
-    "webp": "node tools/to-webp.mjs --delete"
+    "webp": "node tools/to-webp.mjs --delete",
+    "thumbs": "node tools/thumbs.mjs"
   },
   "devDependencies": {
     "live-server": "^1.2.2",

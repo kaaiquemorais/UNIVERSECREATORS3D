@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://3duniversecreators.netlify.app/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-10.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/modelagem-3d.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-16.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-22.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-04.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/peca-decorativa.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-08.webp</image:loc></image:image>
+    <image:image><image:loc>https://3duniversecreators.netlify.app/galeria/produto-12.webp</image:loc></image:image>
+  </url>
+</urlset>

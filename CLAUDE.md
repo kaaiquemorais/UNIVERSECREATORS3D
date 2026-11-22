@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## O que é
 
-Site institucional estático (uma página) da 3D Universe Creators, em português. HTML/CSS/JS puro — **sem framework, sem bundler, sem etapa de build**. `index.html`, `style.css` e `script.js` são servidos como estão.
+Site institucional estático (uma página) da **Universe Creators 3D** (o "3D" vai no final; o nome antigo "3D Universe Creators" só aparece como `alternateName` no JSON-LD), estúdio de impressão 3D em São Paulo. HTML/CSS/JS puro — **sem framework, sem bundler, sem build**. Fatos do negócio em [PRODUCT.md](PRODUCT.md) — leia antes de escrever texto: **não mencionar PLA nem material nenhum**, atendimento **SP + envio para todo o Brasil**, sem endereço de rua, sem depoimentos/preços/prazos fixos, **sem ano no rodapé**.
 
-O `package.json` existe apenas para ferramentas de desenvolvimento (servidor local e conversão de imagens); nada dele vai para produção.
+O `package.json` é só ferramenta de desenvolvimento; nada dele vai para produção.
 
 ## Comandos
 
@@ -14,56 +14,55 @@ O `package.json` existe apenas para ferramentas de desenvolvimento (servidor loc
 npm install          # dependências de desenvolvimento (live-server, sharp)
 npm run dev          # servidor local com auto-reload em http://127.0.0.1:5173
 npm run webp         # converte galeria/ e logo/ para WebP e APAGA os originais
+npm run thumbs       # gera galeria/600/*.webp (miniaturas) e logo/logo-mark.webp
 ```
 
-Não há testes nem linter neste repositório.
+Não há testes nem linter.
 
 ### Imagens
 
-Toda imagem do site deve ser **WebP** — o repositório não guarda PNG/JPEG. Ao adicionar uma imagem nova: copiar para `galeria/` (ou `logo/`), rodar `npm run webp` e referenciar o `.webp` no HTML. O script ([tools/to-webp.mjs](tools/to-webp.mjs)) usa qualidade 82 e limita a largura a 1400px.
+Toda imagem é **WebP**. Foto nova (inclusive enviada por caminho absoluto): mover para `galeria/`, `npm run webp` (apaga o PNG/JPEG), depois `npm run thumbs`. No HTML use `galeria/600/<nome>.webp` com `width`/`height` reais do original e `alt` descritivo em português. Duplicatas na pasta: `produto-07` = `maquete-arquitetonica`, `produto-14` = `peca-decorativa`, `produto-20` = `produto-05` — não use as duas.
 
-Exceção deliberada: `og:image`, `twitter:image` e o favicon no `<head>` apontam para PNG externo (imgur), porque WhatsApp e Facebook não renderizam WebP de forma confiável em prévia de link.
+Exceção: `og:image`, `twitter:image` e favicon apontam para PNG externo (imgur) — WhatsApp/Facebook não mostram WebP em prévia de link.
 
 ## Deploy
 
-O projeto Netlify **não está conectado ao GitHub** — `git push` sozinho não publica nada. O deploy é manual, e a pasta publicada não pode conter `node_modules/`:
+Netlify **não conectado ao GitHub** — `git push` não publica. Deploy manual, **só quando o Kaique pedir**:
 
 ```bash
-# copiar só index.html, style.css, script.js, galeria/, logo/ para uma pasta limpa
+# pasta limpa com: index.html, style.css, script.js, robots.txt, sitemap.xml,
+# llms.txt, galeria/ (com galeria/600/), logo/   — nunca node_modules/, tools/, *.md
 netlify deploy --prod --dir=<pasta-limpa>
 ```
 
-- Repositório: `github.com/kaaiquemorais/3DNEW` (branch `main`, raiz = raiz do site)
-- Produção: https://3duniversecreators.netlify.app
-- `netlify.toml` publica a raiz sem build; se um dia o site for conectado ao GitHub, é esse arquivo que manda.
+Produção: https://3duniversecreators.netlify.app · repo `github.com/kaaiquemorais/3DNEW` (main).
 
 ## Arquitetura
 
-Três arquivos, cada um com uma responsabilidade clara:
+- **`index.html`** — header → hero → serviços → trabalhos → como funciona → dúvidas (FAQ) → contato → footer. Âncoras: `#home`, `#servicos`, `#trabalhos`, `#como-funciona`, `#duvidas`, `#contato`, `#rodape`.
+- **`style.css`** — blocos `/* === NOME === */`, tokens no `:root`. Breakpoints no fim: 1024px, **860px (divisor PC/celular)**, 560px, 374px.
+- **`script.js`** — `initNoOrphans`, `initHeroMatrix` (config em `MATRIX_CONFIG`), `initNavbar`, `initFloatingWhatsapp`, `initServiceCarousel`, `initGallery`.
 
-- **`index.html`** — todas as seções na ordem em que aparecem: hero → marquee → carousel → serviços → portfólio → why-us → contato → footer. Seções com `id` (`#home`, `#servicos`, `#portfolio`, `#contato`, `#rodape`) são âncoras de navegação.
-- **`style.css`** — dividido por blocos com comentários `/* === NOME === */`. As cores vivem em custom properties no `:root` (`--blue`, `--cyan`, `--neon`, `--glass`…); use-as em vez de hex literais. O bloco `RESPONSIVE` no fim concentra os breakpoints (1200px, 1024px, 768px) — mudanças de mobile vão lá, não espalhadas pelo arquivo.
-- **`script.js`** — quatro funções independentes chamadas em `DOMContentLoaded`: `initHeroRings`, `initNavbar`, `initScrollReveal` (mais o helper `hexToRgb`). Cada uma sai cedo se seu elemento não existir no DOM.
+### Comportamentos que o dono pediu (não desfazer)
 
-### Hero
+- **Hero (tela cheia, sem rolar, fundo branco)**: PC = logo (ícone **ao lado** do nome) + título + texto + botões à esquerda, mascote à direita; celular = mascote em cima, texto centralizado embaixo. O mascote sobe de um degradê curto na base (`mask-image` em `.hero-figure`; no PC a área passa da coluna com `margin-inline` negativa — não faça o `img` vazar, o mask cortaria). Chuva Matrix azul num `<canvas>` **dentro** de `.hero-figure` (só atrás do mascote). Na asa do dragão, um brilho azul sutil varre a malha a cada 6s (`.hero-wing`, recortado por `logo/mascote-asa-mask.webp` — máscara gerada da própria imagem, mesmo encaixe contain/base do `img`; se trocar o mascote, gere outra máscara).
+- **Título** sempre em 2 linhas: `.h1-line` "Impressão 3D personalizada" / "em São Paulo", com `white-space: nowrap`; o tamanho é limitado para caber na coluna (testado de 320px a 1920px).
+- **Menu**: vidro fosco estilo iPhone (`backdrop-filter`), **sem risco embaixo**. No PC fica escondido na hero, aparece a partir da 2ª seção (`.is-shown` em `initNavbar`). No celular, cabeçalho normal com hambúrguer.
+- **WhatsApp flutuante** só no celular e só depois da hero (na hero cobria os botões).
+- **Serviços**: PC = carrossel arrastável com o mouse + setas + "Arraste para o lado"; celular = grade de 2 colunas centralizada (foto 3:4 inteira).
+- **Fotos** com neon azul no contorno; galeria em 3:4 (formato das fotos, quase sem corte); mostra 8 e "Ver mais trabalhos" (centralizado, sem link do Instagram ao lado) revela o resto.
+- **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
+- **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
+- No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo, links de serviços e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
+- Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto). Letras pequenas de propósito.
 
-A parte mais elaborada do site e a que mais muda. Três camadas empilhadas dentro de `<section class="hero">`:
+## SEO e buscadores de IA
 
-1. `#heroRings` (z-index 1) — fundo **Magic Rings** do reactbits.dev, portado do React/three.js para **WebGL puro** em `script.js`. Os shaders são strings (`RINGS_VERT`/`RINGS_FRAG`) e todos os parâmetros ficam em `RINGS_CONFIG` no topo do arquivo — é lá que se muda cor, número de anéis, velocidade. Sem interação de mouse: os anéis ficam sempre centralizados. A animação pausa quando a hero sai da tela ou a aba fica inativa. Sem WebGL, o `.hero::before` do CSS entrega um brilho azul de fallback.
-2. `.hero-bg-overlay` (z-index 2) — vinheta que escurece as bordas e mantém o centro legível.
-3. `.hero-stage` (z-index 3) — logo e `<h1>` ocupam **a mesma célula de um grid** (`grid-area: 1/1`), então ficam sobrepostos e centralizados. O ciclo "logo → texto → logo" é 100% CSS: duas animações de 14s (`heroCycleLogo` e `heroCycleText`) com fases opostas em porcentagem. Para ajustar o ritmo, mexa nas porcentagens dos dois keyframes juntos — elas se encaixam (logo some em 50%, texto entra em 62%).
-
-O CTA `.hero-cta-mobile` só aparece em ≤768px, posicionado acima do botão flutuante do WhatsApp.
-
-Ao mudar o tamanho do texto ou do logo da hero, confira que continuam dentro do anel central: o raio interno é `uBaseRadius * min(largura, altura)` da hero.
-
-### CSS morto
-
-O arquivo ainda tem regras da hero antiga (`.hero-left`, `.hero-headline`, `.hfc*`, `.hero-inner`, `.btn-hero-primary`, `.hero-particles-canvas`, `.footer-logo-img`) sem nenhum elemento correspondente no HTML. São inofensivas, mas não sirva-se delas como referência ao escrever CSS novo.
+- Um `<h1>`; H2 por seção com palavra-chave; H3 em serviços/passos/perguntas. `<title>` ≤ 65 car., description ≤ 155.
+- JSON-LD: `WebSite`, `LocalBusiness`+`ProfessionalService` (serviços em `hasOfferCatalog`), `FAQPage`. **O FAQ do JSON-LD espelha o FAQ visível** (6 perguntas) — mudou um, mude o outro.
+- `robots.txt` libera robôs de IA (GPTBot, OAI-SearchBot, Google-Extended, ClaudeBot, PerplexityBot…); `llms.txt` resume o negócio; `sitemap.xml` com imagens — atualize `lastmod` e o `llms.txt` quando o conteúdo mudar.
+- Palavras-chave (Ubersuggest BR, nov/2026): "impressão 3d personalizada" 1.600/mês, "impressão 3d perto de mim" 1.300, "serviço de impressão 3d" 1.000, "maquete 3d" 1.000, "impressão 3d são paulo" 390, "prototipagem 3d" 210. Concorrente no topo para SP: printit3d.com.br.
 
 ## Verificação visual
 
-Sem servidor de testes, a checagem é por screenshot com Chrome headless. Dois detalhes que atrapalham:
-
-- **O ciclo da hero não pode ser cronometrado** por `--virtual-time-budget` (o relógio da animação corre à frente do tempo virtual). Para capturar uma fase específica, monte uma página de teste que importe o `style.css` real e congele o ciclo com `animation-play-state: paused; animation-delay: -Ns`.
-- **Seções com scroll-reveal saem em branco** nos screenshots: `initScrollReveal` zera a opacidade dos cards e o `setTimeout` do observer não dispara em tempo virtual. Para conferir esses blocos, renderize o markup da seção sem o `script.js`.
+Chrome headless (`C:/Program Files/Google/Chrome/Application/chrome.exe --headless=new --screenshot --virtual-time-budget=5000`). O headless não aceita janela estreita: **para celular, ponha o site em `<iframe>` do tamanho do aparelho** (ex.: 375×553 iPhone 8, 414×622 8 Plus, 430×746 Pro Max — já descontando a barra do Safari) numa página auxiliar na raiz do site e apague-a depois. Iframe muito alto distorce a hero (ela usa `svh`); para ver seções, use iframes de celular rolados até cada âncora via `contentWindow.scrollTo`.
