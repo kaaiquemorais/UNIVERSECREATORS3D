@@ -160,8 +160,8 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     justify-content: center;
     gap: 9px;
     min-height: 46px;
-    padding: 0 20px;
-    border-radius: var(--radius-sm);
+    padding: 0 22px;
+    border-radius: 999px;   /* botões em pílula */
     font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: 600;
@@ -324,7 +324,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 .site-header .nav-link,
 .site-header .nav-toggle { transition: color 0.35s, background-color 0.35s, border-color 0.35s; }
 .site-header.on-dark .brand-name { color: #fff; }
-.site-header.on-dark .brand-name span { color: var(--blue-light); }
+.site-header.on-dark .brand-name span { color: var(--blue-light); --shine-base: var(--blue-light); }
 .site-header.on-dark .nav-link { color: rgba(255, 255, 255, 0.82); }
 .site-header.on-dark .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
 .site-header.on-dark .nav-toggle {
@@ -356,6 +356,24 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     color: var(--ink);
 }
 .brand-name span { color: var(--blue); }
+/* shine passando no "3D" do nome (igual ao link tree) */
+.brand-name span {
+    --shine-base: var(--blue);
+    background: linear-gradient(100deg,
+        var(--shine-base) 0%, var(--shine-base) 38%,
+        var(--blue-light) 45%, #ffffff 50%, var(--blue-light) 55%,
+        var(--shine-base) 62%, var(--shine-base) 100%) 0 0 / 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .brand-name span { animation: textShine 4s ease-in-out infinite; }
+}
+@keyframes textShine {
+    0%        { background-position: 100% 0; }
+    55%, 100% { background-position: 0% 0; }
+}
 
 .nav { margin-left: auto; }
 .nav-menu { display: flex; gap: 4px; }
@@ -377,7 +395,7 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
     height: 40px;
     margin-left: 4px;
     border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
+    border-radius: 50%;
     background: var(--surface);
     cursor: pointer;
     align-items: center;

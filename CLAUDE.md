@@ -51,9 +51,11 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **WhatsApp flutuante** só no celular e só depois da hero (na hero cobria os botões).
 - **Serviços**: PC = carrossel arrastável com o mouse + setas + "Arraste para o lado"; celular = grade de 2 colunas centralizada (foto 3:4 inteira).
 - **Fotos** com neon azul no contorno; galeria em 3:4 (formato das fotos, quase sem corte); mostra 8 e "Ver mais trabalhos" (centralizado, sem link do Instagram ao lado) revela o resto.
+- Botões (`.btn`) em formato de pílula (raio 999px), como no link tree.
 - **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
 - No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
+- O "3D" do nome (`.brand-name span`) tem shine passando a cada 4s, como no link tree.
 - Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto), **hospedadas em `fonts/`** (woff2 variável, só subconjunto latino) com `@font-face` no topo do style.css e preload no head — não voltar para o Google Fonts (custava velocidade). Letras pequenas de propósito.
 
 ## SEO e buscadores de IA
