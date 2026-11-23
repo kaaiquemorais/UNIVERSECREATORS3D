@@ -503,49 +503,58 @@ p, li, figcaption, address, small, summary { text-wrap: pretty; }
 /* Asa do dragão: um brilho azul sutil varre a malha holográfica da asa.
    O recorte vem de uma máscara tirada da própria imagem e usa o mesmo
    encaixe do <img> (contain + base centralizada), então fica alinhado. */
-.hero-wing {
-    display: none;
-    pointer-events: none;
-    background: linear-gradient(105deg, transparent 42%, rgba(56, 160, 255, 0.5) 50%, transparent 58%) 0 0 / 250% 100% no-repeat;
-    -webkit-mask: url("logo/mascote-asa-mask.webp") center bottom / contain no-repeat;
-    mask: url("logo/mascote-asa-mask.webp") center bottom / contain no-repeat;
-}
-@media (prefers-reduced-motion: no-preference) {
-    .hero-wing {
-        display: block;
-        animation: mascotRise 1.2s var(--ease-out) both, wingScan 6s ease-in-out 1.6s infinite;
-    }
-}
-/* Shine no dragão: reflexo de luz em diagonal, como numa peça recém-impressa.
-   Núcleo branco com bordas azul-claras (só branco sumiria no dragão branco). */
+/* Brilhos da asa e do dragão: a forma vem de uma máscara tirada da imagem;
+   a faixa de luz é um ::before que só se MOVE (transform), animado pela
+   placa de vídeo, sem redesenhar a área a cada quadro (mais leve no celular). */
+.hero-wing,
 .hero-shine {
     display: none;
     pointer-events: none;
-    background: linear-gradient(
-        115deg,
-        transparent 36%,
-        rgba(124, 196, 255, 0.18) 44%,
-        rgba(255, 255, 255, 0.55) 50%,
-        rgba(124, 196, 255, 0.18) 56%,
-        transparent 64%
-    ) 0 0 / 300% 100% no-repeat;
+    overflow: hidden;
+}
+.hero-wing {
+    -webkit-mask: url("logo/mascote-asa-mask.webp") center bottom / contain no-repeat;
+    mask: url("logo/mascote-asa-mask.webp") center bottom / contain no-repeat;
+}
+.hero-shine {
     -webkit-mask: url("logo/mascote-dragao-mask.webp") center bottom / contain no-repeat;
     mask: url("logo/mascote-dragao-mask.webp") center bottom / contain no-repeat;
 }
+.hero-wing::before,
+.hero-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    transform: translateX(-110%);
+    will-change: transform;
+}
+/* asa: faixa azul do holograma */
+.hero-wing::before {
+    background: linear-gradient(105deg, transparent 20%, rgba(56, 160, 255, 0.5) 50%, transparent 80%);
+}
+/* dragão: núcleo branco com bordas azul-claras (só branco sumiria no dragão) */
+.hero-shine::before {
+    width: 45%;
+    background: linear-gradient(115deg,
+        transparent 10%, rgba(124, 196, 255, 0.18) 30%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(124, 196, 255, 0.18) 70%, transparent 90%);
+}
 @media (prefers-reduced-motion: no-preference) {
-    .hero-shine {
+    .hero-wing, .hero-shine {
         display: block;
-        animation: mascotRise 1.2s var(--ease-out) both, dragonShine 9s ease-in-out 2.2s infinite;
+        animation: mascotRise 1.2s var(--ease-out) both;
     }
+    .hero-wing::before  { animation: lightSweep 6s ease-in-out 1.6s infinite; }
+    .hero-shine::before { animation: lightSweep 9s ease-in-out 2.2s infinite; }
 }
-@keyframes dragonShine {
-    0%        { background-position: 100% 0; }
-    65%, 100% { background-position: 0% 0; }
-}
-
-@keyframes wingScan {
-    0%        { background-position: 100% 0; }
-    55%, 100% { background-position: 0% 0; }
+/* atravessa da esquerda para a direita e espera o próximo ciclo */
+@keyframes lightSweep {
+    0%        { transform: translateX(-110%); }
+    60%, 100% { transform: translateX(260%); }
 }
 /* versão sem opacidade para o <img>: ele já nasce visível (melhor LCP) */
 @keyframes mascotRiseSolid {

@@ -2,6 +2,7 @@ const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 // =============================================
 // HERO: chuva "Matrix" azul em fundo branco, atrás do mascote
+// Começa só depois que a página carregou (não disputa com o carregamento).
 // =============================================
 const MATRIX_CONFIG = {
     chars: 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ0123456789ABCDEF3D',
@@ -18,7 +19,8 @@ function initHeroMatrix() {
     if (!ctx) return;
 
     const cfg = MATRIX_CONFIG;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // celular: resolução 1x (é um efeito de fundo esfumaçado; 4x menos pixels)
+    const dpr = window.innerWidth < 861 ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     let w = 0, h = 0, size = 16, drops = [];
     let frameId = 0, last = 0, visible = true;
 
@@ -68,22 +70,21 @@ function initHeroMatrix() {
         frameId = 0;
     }
 
-    resize();
-    new ResizeObserver(() => { resize(); if (REDUCE_MOTION) for (let i = 0; i < 60; i++) draw(); })
-        .observe(canvas);
-
-    // Sem movimento: desenha um quadro parado e não anima
-    if (REDUCE_MOTION) {
-        for (let i = 0; i < 60; i++) draw();
-        return;
-    }
-
-    new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting;
-        visible ? start() : stop();
-    }).observe(canvas);
-    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-    start();
+    const boot = () => {
+        resize();
+        new ResizeObserver(() => { resize(); if (REDUCE_MOTION) for (let i = 0; i < 60; i++) draw(); })
+            .observe(canvas);
+        if (REDUCE_MOTION) { for (let i = 0; i < 60; i++) draw(); return; }
+        new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting;
+            visible ? start() : stop();
+        }).observe(canvas);
+        document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+        start();
+    };
+    const later = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+    if (document.readyState === 'complete') later(boot);
+    else window.addEventListener('load', () => later(boot), { once: true });
 }
 
 // =============================================

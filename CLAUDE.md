@@ -53,6 +53,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **Fotos** com neon azul no contorno, formato 3:4. A galeria de **Trabalhos também é carrossel** (todas as 19 fotos; PC 4 por vez com setas, celular 2 por vez). Os dois carrosséis usam `initCarousels` em script.js: cada `.carousel-controls[data-for="<id do trilho>"]`.
 - Botões (`.btn`) em formato de pílula (raio 999px), como no link tree.
 - **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
+- **Desempenho dos efeitos:** a chuva Matrix só começa após o `load` (requestIdleCallback) e no celular desenha em 1x; os brilhos da asa/dragão são um `::before` animado só com `transform` (`lightSweep`), nunca `background-position` em área grande.
 - **Não usar `content-visibility`** nas seções: o tamanho reservado (`contain-intrinsic-size`) deixou a faixa do contato com ~200px azuis vazios no celular.
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
 - No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
