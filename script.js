@@ -151,17 +151,23 @@ function initFloatingWhatsapp() {
 }
 
 // =============================================
-// SERVIÇOS: carrossel arrastável (só no computador, >860px)
-// No celular a mesma lista vira uma lista vertical pelo CSS.
+// CARROSSÉIS (serviços e trabalhos)
+// Cada .carousel-controls[data-for] aponta para o id do trilho.
+// PC: arrastar com o mouse + setas. Celular: o dedo rola nativamente.
 // =============================================
-function initServiceCarousel() {
-    const track = document.getElementById('serviceTrack');
-    if (!track) return;
-    const [prev, next] = document.querySelectorAll('.carousel-btn');
+function initCarousels() {
+    document.querySelectorAll('.carousel-controls[data-for]').forEach(controls => {
+        const track = document.getElementById(controls.dataset.for);
+        if (track) initCarousel(track, controls);
+    });
+}
+
+function initCarousel(track, controls) {
+    const [prev, next] = controls.querySelectorAll('.carousel-btn');
     const desktop = window.matchMedia('(min-width: 861px)');
 
     const stepSize = () => {
-        const card = track.querySelector('.service');
+        const card = track.firstElementChild;
         const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
         return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
     };
@@ -229,25 +235,6 @@ function initServiceCarousel() {
 }
 
 // =============================================
-// GALERIA: "Ver mais trabalhos"
-// Sem JS todas as fotos aparecem; com JS começa com 8.
-// =============================================
-function initGallery() {
-    const gallery = document.getElementById('gallery');
-    const button = document.getElementById('galleryMore');
-    if (!gallery || !button) return;
-    if (!gallery.querySelector('.is-extra')) return;
-
-    button.hidden = false;
-    button.addEventListener('click', () => {
-        const open = gallery.classList.toggle('is-open');
-        button.setAttribute('aria-expanded', String(open));
-        button.textContent = open ? 'Mostrar menos' : 'Ver mais trabalhos';
-        if (!open) gallery.scrollIntoView({ block: 'start' });
-    });
-}
-
-// =============================================
 // SEM PALAVRA SOZINHA NA ÚLTIMA LINHA
 // Troca o último espaço de cada texto por espaço fixo (nbsp), assim as
 // duas últimas palavras sempre quebram juntas. Regra do dono do site.
@@ -283,6 +270,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroMatrix();
     initNavbar();
     initFloatingWhatsapp();
-    initServiceCarousel();
-    initGallery();
+    initCarousels();
 });

@@ -41,7 +41,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 
 - **`index.html`** — header → hero → serviços → trabalhos → como funciona → dúvidas (FAQ) → contato → footer. Âncoras: `#home`, `#servicos`, `#trabalhos`, `#como-funciona`, `#duvidas`, `#contato`, `#rodape`.
 - **`style.css`** — blocos `/* === NOME === */`, tokens no `:root`. Breakpoints no fim: 1024px, **860px (divisor PC/celular)**, 560px, 374px.
-- **`script.js`** — `initNoOrphans`, `initHeroMatrix` (config em `MATRIX_CONFIG`), `initNavbar`, `initFloatingWhatsapp`, `initServiceCarousel`, `initGallery`.
+- **`script.js`** — `initNoOrphans`, `initHeroMatrix` (config em `MATRIX_CONFIG`), `initNavbar`, `initFloatingWhatsapp`, `initCarousels`.
 
 ### Comportamentos que o dono pediu (não desfazer)
 
@@ -50,7 +50,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **Menu**: vidro fosco estilo iPhone num `::before` que some em degradê embaixo (**sem corte seco, sem risco**). No celular a hero sobe para trás do menu (`margin-top` negativa) e a chuva Matrix vai até o topo da tela, aparecendo desfocada pelo vidro. O vidro é **só desfoque do fundo real, sem cor/tinta por cima** (pedido do dono); ao rolar o desfoque aumenta; sobre a faixa escura do contato o texto vira branco (`.on-dark`, calculado em `initNavbar` pelas seções `.contact`). No PC fica escondido na hero, aparece a partir da 2ª seção (`.is-shown` em `initNavbar`). No celular, cabeçalho normal com hambúrguer.
 - **WhatsApp flutuante** só no celular e só depois da hero (na hero cobria os botões).
 - **Serviços**: PC = carrossel arrastável com o mouse + setas + "Arraste para o lado"; celular = grade de 2 colunas centralizada (foto 3:4 inteira).
-- **Fotos** com neon azul no contorno; galeria em 3:4 (formato das fotos, quase sem corte); mostra 8 e "Ver mais trabalhos" (centralizado, sem link do Instagram ao lado) revela o resto.
+- **Fotos** com neon azul no contorno, formato 3:4. A galeria de **Trabalhos também é carrossel** (todas as 19 fotos; PC 4 por vez com setas, celular 2 por vez). Os dois carrosséis usam `initCarousels` em script.js: cada `.carousel-controls[data-for="<id do trilho>"]`.
 - Botões (`.btn`) em formato de pílula (raio 999px), como no link tree.
 - **Botão `.btn-primary`** = "shiny button" azul (borda cônica girando com `@property`). O detector de contraste acusa o azul-claro da borda — falso-positivo.
 - **Não usar `content-visibility`** nas seções: o tamanho reservado (`contain-intrinsic-size`) deixou a faixa do contato com ~200px azuis vazios no celular.

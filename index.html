@@ -251,8 +251,8 @@
                     </a>
                 </div>
 
-                <!-- Controles do carrossel (só no computador) -->
-                <div class="carousel-controls">
+                <!-- Controles do carrossel (setas só no computador) -->
+                <div class="carousel-controls" data-for="serviceTrack">
                     <span class="carousel-hint">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M4 12h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         Arraste para o lado
@@ -318,7 +318,20 @@
                     <p>Peças reais que saíram das nossas impressoras.</p>
                 </div>
 
-                <ul class="gallery" id="gallery">
+                <div class="carousel-controls" data-for="gallery">
+                    <span class="carousel-hint">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M4 12h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Arraste para o lado
+                    </span>
+                    <button class="carousel-btn" type="button" data-dir="-1" aria-controls="gallery" aria-label="Trabalho anterior">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="carousel-btn" type="button" data-dir="1" aria-controls="gallery" aria-label="Próximo trabalho">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+
+                <ul class="gallery" id="gallery" tabindex="0" aria-label="Trabalhos">
                     <li><figure><img src="galeria/600/produto-01.webp" width="1086" height="1448" loading="lazy" alt="Suporte para headset impresso em 3D com detalhes vermelhos"><figcaption>Suporte para headset</figcaption></figure></li>
                     <li><figure><img src="galeria/600/produto-05.webp" width="1084" height="1451" loading="lazy" alt="Busto de guerreiro impresso em 3D prateado"><figcaption>Busto colecionável</figcaption></figure></li>
                     <li><figure><img src="galeria/600/produto-08.webp" width="1122" height="1402" loading="lazy" alt="Troféus de ciclismo personalizados impressos em 3D laranja"><figcaption>Troféus personalizados</figcaption></figure></li>
@@ -327,24 +340,18 @@
                     <li><figure><img src="galeria/600/produto-12.webp" width="1122" height="1402" loading="lazy" alt="Chaveiros personalizados com logotipos impressos em 3D"><figcaption>Chaveiros personalizados</figcaption></figure></li>
                     <li><figure><img src="galeria/600/produto-15.webp" width="1122" height="1402" loading="lazy" alt="Mandala decorativa impressa em 3D azul"><figcaption>Mandala decorativa</figcaption></figure></li>
                     <li><figure><img src="galeria/600/sob-encomenda.webp" width="900" height="1125" loading="lazy" alt="Peças sob encomenda com logotipo impressas em 3D em verde e rosa"><figcaption>Peças com a sua marca</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-10.webp" width="1122" height="1402" loading="lazy" alt="Astronauta azul colecionável impresso em 3D"><figcaption>Astronauta colecionável</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-02.webp" width="1086" height="1448" loading="lazy" alt="Suporte dourado impresso em 3D para controle de videogame e celular"><figcaption>Suporte para controle e celular</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-09.webp" width="1122" height="1402" loading="lazy" alt="Escultura prateada impressa em 3D de uma figura empurrando uma esfera"><figcaption>Escultura decorativa</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-17.webp" width="1400" height="1875" loading="lazy" alt="Suporte de celular em formato de mãos impresso em 3D"><figcaption>Suporte de mãos para celular</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-13.webp" width="1122" height="1402" loading="lazy" alt="Réplica das pirâmides do Egito impressa em 3D"><figcaption>Pirâmides em miniatura</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-06.webp" width="1086" height="1448" loading="lazy" alt="Carcaça para campainha com câmera feita com impressão 3D"><figcaption>Case para campainha</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-18.webp" width="1400" height="1875" loading="lazy" alt="Suporte de controle de videogame em formato de personagem roxo impresso em 3D"><figcaption>Suporte para controle</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-11.webp" width="1122" height="1402" loading="lazy" alt="Logotipo em 3D com base, impresso azul e amarelo"><figcaption>Logotipo em 3D</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-21.webp" width="1400" height="1875" loading="lazy" alt="Suporte vazado para console de videogame impresso em 3D"><figcaption>Suporte para console</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/produto-19.webp" width="1400" height="1875" loading="lazy" alt="Suportes em formato de onda para celular e controle impressos em 3D"><figcaption>Suportes em onda</figcaption></figure></li>
-                    <li class="is-extra"><figure><img src="galeria/600/maquete-arquitetonica.webp" width="1024" height="1536" loading="lazy" alt="Moldura decorativa com iluminação LED impressa em 3D"><figcaption>Moldura com LED</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-10.webp" width="1122" height="1402" loading="lazy" alt="Astronauta azul colecionável impresso em 3D"><figcaption>Astronauta colecionável</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-02.webp" width="1086" height="1448" loading="lazy" alt="Suporte dourado impresso em 3D para controle de videogame e celular"><figcaption>Suporte para controle e celular</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-09.webp" width="1122" height="1402" loading="lazy" alt="Escultura prateada impressa em 3D de uma figura empurrando uma esfera"><figcaption>Escultura decorativa</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-17.webp" width="1400" height="1875" loading="lazy" alt="Suporte de celular em formato de mãos impresso em 3D"><figcaption>Suporte de mãos para celular</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-13.webp" width="1122" height="1402" loading="lazy" alt="Réplica das pirâmides do Egito impressa em 3D"><figcaption>Pirâmides em miniatura</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-06.webp" width="1086" height="1448" loading="lazy" alt="Carcaça para campainha com câmera feita com impressão 3D"><figcaption>Case para campainha</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-18.webp" width="1400" height="1875" loading="lazy" alt="Suporte de controle de videogame em formato de personagem roxo impresso em 3D"><figcaption>Suporte para controle</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-11.webp" width="1122" height="1402" loading="lazy" alt="Logotipo em 3D com base, impresso azul e amarelo"><figcaption>Logotipo em 3D</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-21.webp" width="1400" height="1875" loading="lazy" alt="Suporte vazado para console de videogame impresso em 3D"><figcaption>Suporte para console</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/produto-19.webp" width="1400" height="1875" loading="lazy" alt="Suportes em formato de onda para celular e controle impressos em 3D"><figcaption>Suportes em onda</figcaption></figure></li>
+                    <li><figure><img src="galeria/600/maquete-arquitetonica.webp" width="1024" height="1536" loading="lazy" alt="Moldura decorativa com iluminação LED impressa em 3D"><figcaption>Moldura com LED</figcaption></figure></li>
                 </ul>
-
-                <div class="gallery-more">
-                    <button class="btn btn-ghost" type="button" id="galleryMore" aria-controls="gallery" aria-expanded="false" hidden>
-                        Ver mais trabalhos
-                    </button>
-                </div>
             </div>
         </section>
 
