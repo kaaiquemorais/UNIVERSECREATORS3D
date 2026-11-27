@@ -32,8 +32,10 @@ Netlify **não conectado ao GitHub** — `git push` não publica. Deploy manual,
 ```bash
 # pasta limpa com: index.html, style.css, script.js, robots.txt, sitemap.xml,
 # llms.txt, galeria/ (com 600/ e 800/), logo/, fonts/   — nunca node_modules/, tools/, *.md
-netlify deploy --prod --dir=<pasta-limpa>
+netlify deploy --prod --no-build --dir=<pasta-limpa> --site=daf29d6a-1fa8-4983-b92e-01656cdb0449
 ```
+
+`--no-build` é obrigatório (o painel tem `npm run build` configurado e falha) e `--site` também (a pasta não tem `netlify link`). Esta pasta local **não é repositório git**: para commitar, clonar o repo numa pasta temporária, comparar (`diff -rq --strip-trailing-cr`), copiar só o que mudou e dar push.
 
 Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemorais/UNIVERSECREATORS3D` (main).
 
