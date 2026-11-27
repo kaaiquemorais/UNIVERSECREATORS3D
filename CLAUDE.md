@@ -58,7 +58,7 @@ Produção: https://universecreators3d.netlify.app · repo `github.com/kaaiquemo
 - **Nunca uma palavra sozinha na última linha**: `text-wrap: pretty/balance` no CSS + `initNoOrphans` (nbsp entre as duas últimas palavras).
 - No celular, tudo centralizado (títulos, passos, contato, rodapé). Rodapé enxuto e simétrico: só logo (ícone **em cima** do nome), links de serviços (só no PC; no celular ficam ocultos porque não cabiam numa linha) e "Todos os direitos reservados." (sem ©/nome, sem frase, sem contato — o contato está na seção logo acima). FAQ começa todo fechado.
 - Shine de texto (`textShine`, 4s): "3D" do nome (`.brand-name span`), links com `.link-shine` ("Falar sobre meu projeto", "Pergunte no WhatsApp") e números dos passos (`.step-num`, escalonados 1→4).
-- Fontes: Bricolage Grotesque 650 (títulos) + Inter (texto), **hospedadas em `fonts/`** (woff2 variável, só subconjunto latino) com `@font-face` no topo do style.css e preload no head — não voltar para o Google Fonts (custava velocidade). Letras pequenas de propósito.
+- Fontes: Bricolage Grotesque 650 (títulos) + Poppins 400/500/600 (texto, escolhida em 2026-11-26), **hospedadas em `fonts/`** (woff2, só subconjunto latino; Bricolage variável, Poppins um arquivo por peso). Geophy foi descartada: a versão demo não tem acentos nem licença comercial. Ficam com `@font-face` no topo do style.css e preload no head — não voltar para o Google Fonts (custava velocidade). Letras pequenas de propósito.
 
 ## SEO e buscadores de IA
 
